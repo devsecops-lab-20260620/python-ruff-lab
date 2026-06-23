@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -14,13 +14,13 @@ class ApiError(Exception):
         status_code: int,
         code: str,
         message: str,
-        details: Optional[Sequence[Dict[str, Any]]] = None,
+        details: Sequence[dict[str, Any]] | None = None,
     ) -> None:
         super().__init__(message)
         self.status_code = status_code
         self.code = code
         self.message = message
-        self.details: Optional[List[Dict[str, Any]]] = list(details) if details else None
+        self.details: list[dict[str, Any]] | None = list(details) if details else None
 
 
 def register_exception_handlers(app: FastAPI) -> None:

@@ -1,8 +1,8 @@
+
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from typing import Optional
 
 from app.auth import get_current_user
 from app.database import get_db
@@ -13,7 +13,7 @@ from app.schemas import BookCreate, BookRead, BookStatusType, BookUpdate, PagedB
 router = APIRouter(prefix="/api/v1/books", tags=["books"])
 
 
-def _status_to_model(status_param: Optional[BookStatusType]) -> Optional[BookStatus]:
+def _status_to_model(status_param: BookStatusType | None) -> BookStatus | None:
     if status_param is None:
         return None
     return BookStatus(status_param.value)
@@ -25,9 +25,9 @@ def list_books(
     db: Session = Depends(get_db),
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
-    keyword: Optional[str] = None,
-    owner_user_id: Optional[str] = Query(default=None, alias="ownerUserId"),
-    status_param: Optional[BookStatusType] = Query(default=None, alias="status"),
+    keyword: str | None = None,
+    owner_user_id: str | None = Query(default=None, alias="ownerUserId"),
+    status_param: BookStatusType | None = Query(default=None, alias="status"),
 ) -> PagedBooks:
     query = select(Book)
     count_query = select(func.count(Book.id))

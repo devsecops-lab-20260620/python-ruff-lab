@@ -1,8 +1,8 @@
+
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from typing import Optional
 
 from app.auth import get_current_user, hash_password
 from app.database import get_db
@@ -13,7 +13,7 @@ from app.schemas import PagedUsers, RoleType, UserCreate, UserRead, UserUpdate
 router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 
-def _role_to_model(role: Optional[RoleType]) -> Optional[Role]:
+def _role_to_model(role: RoleType | None) -> Role | None:
     if role is None:
         return None
     return Role(role.value)
@@ -25,8 +25,8 @@ def list_users(
     db: Session = Depends(get_db),
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
-    keyword: Optional[str] = None,
-    role: Optional[RoleType] = None,
+    keyword: str | None = None,
+    role: RoleType | None = None,
 ) -> PagedUsers:
     query = select(User)
     count_query = select(func.count(User.id))

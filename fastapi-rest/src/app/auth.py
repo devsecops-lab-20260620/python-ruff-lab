@@ -54,8 +54,8 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         raise ApiError(401, "UNAUTHORIZED", "トークンが不正、または期限切れです")
 
     user_id = decode_access_token(token)
-    user = db.get(User, user_id)
-    if not user:
+    user: User | None = db.query(User).filter(User.id == user_id).first()
+    if user is None:
         raise ApiError(401, "UNAUTHORIZED", "認証に失敗しました")
     return user
 
