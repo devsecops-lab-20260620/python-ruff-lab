@@ -1,0 +1,20 @@
+# ユーザー一覧（平文パスワード含む）
+.users.json
+
+# SQLite データベースファイル（実データ・テストデータ）
+*.db
+*.db-shm
+*.db-wal
+
+# 環境変数ファイル（DB接続URL・JWTシークレット等の機密情報）
+.env
+
+# Python 仮想環境
+.venv/
+
+# Python キャッシュ
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
