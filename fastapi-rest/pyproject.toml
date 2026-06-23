@@ -25,9 +25,24 @@ dev = [
 pythonpath = ["src"]
 
 [tool.ruff]
-line-length = 100
+# このプロジェクトでは可読性を考慮し、1行あたり最大120文字まで許可します。
+line-length = 120
 target-version = "py311"
 
 [tool.ruff.lint]
+# 有効化するルール:
+# E/F: pycodestyle/pyflakes の基本的な品質チェック
+# I: import の並び順チェック
+# UP: 新しい Python 構文へのアップグレード提案
+# B: bugbear のベストプラクティスチェック
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI では、関数引数のデフォルト値に Depends(...) や Query(...) を
+# 使うのが一般的なため、依存性注入に対する B008 の誤検知を避ける目的で
+# これらの呼び出しを安全なものとして扱います。
+extend-immutable-calls = [
+  "fastapi.Depends",
+  "fastapi.Query",
+]
 

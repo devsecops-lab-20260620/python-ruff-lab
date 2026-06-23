@@ -1,7 +1,7 @@
 import os
+import sys
 from collections.abc import Generator
 from pathlib import Path
-import sys
 
 import pytest
 from fastapi.testclient import TestClient
